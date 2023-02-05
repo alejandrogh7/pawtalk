@@ -1,0 +1,94 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Room {
+  _id: ID!
+  roomname: String!
+  description: String!
+  users: [User!]!
+  creator: User!
+  posts: [Post!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Post {
+  _id: ID!
+  text: String!
+  sender: User!
+  room: Room!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type User {
+  _id: ID!
+  name: String!
+  email: String!
+  password: String!
+  posts: [Post!]!
+  rooms: [Room!]!
+  createdRooms: [Room!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  hashedRt: String!
+}
+
+type Query {
+  users: [User!]!
+  userByID(id: String!): User!
+  userByName(name: String!): User!
+  posts: [Post!]!
+  post(id: String!): Post!
+  rooms: [Room!]!
+  roomByID(id: String!): Room!
+  roomByName(name: String!): Room!
+}
+
+type Mutation {
+  createUser(payload: CreateUserDto!): User!
+  updateUser(id: String!, payload: UpdateUserDto!): Boolean!
+  removeToken(id: String!): Boolean!
+  createPost(payload: CreatePostDto!): Post!
+  update(id: String!, payload: UpdatePostDto!): Boolean!
+  createRoom(payload: CreateRoomInput!): Room!
+  updateRoom(id: String!, payload: UpdateRoomInput!): Boolean!
+}
+
+input CreateUserDto {
+  name: String!
+  email: String!
+  password: String!
+}
+
+input UpdateUserDto {
+  hashedRt: String!
+  name: String!
+  email: String!
+}
+
+input CreatePostDto {
+  text: String!
+  sender: String!
+  room: String!
+}
+
+input UpdatePostDto {
+  text: String!
+}
+
+input CreateRoomInput {
+  roomname: String!
+  description: String!
+  userId: String!
+}
+
+input UpdateRoomInput {
+  description: String!
+}
