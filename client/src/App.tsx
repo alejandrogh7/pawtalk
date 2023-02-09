@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import ChatRooms from "./components/ChatRooms";
 import Home from "./components/Home";
 import ChatRoomNotFound from "./components/ChatRoomNotFound";
-import "./App.css";
+import "./styles/App.css";
 
 function App() {
   return (
