@@ -1,4 +1,5 @@
 import React from "react";
+import style from "../styles/NotFound.module.css";
 
 interface NotFoundProps {
   text: string;
@@ -6,7 +7,7 @@ interface NotFoundProps {
 
 const NotFound: React.FC<NotFoundProps> = ({ text }) => {
   return (
-    <div>
+    <div className={style.not_found_cont}>
       <h1>{text}</h1>
     </div>
   );
