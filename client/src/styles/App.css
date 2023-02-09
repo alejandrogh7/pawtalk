@@ -1,13 +1,17 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
+  /* max-width: 1280px;
+  margin: 0 auto; 
   padding: 2rem;
-  text-align: start;
-  border: 1px solid red;
-  height: 100%;
+  text-align: start; */
+  height: 100vh;
   width: 100%;
 }
 
 .card {
   padding: 2em;
+}
+
+.App {
+  height: 100%;
+  width: 100%;
 }
