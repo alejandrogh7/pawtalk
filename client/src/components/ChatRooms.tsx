@@ -16,7 +16,7 @@ const ChatRooms = () => {
 
   if (!messages) {
     return (
-      <div>
+      <div style={{ display: "flex", flexDirection: "row" }}>
         <Rooms />
         <NotFound text={`Room "name" not found`} />
         <Outlet />
@@ -24,7 +24,7 @@ const ChatRooms = () => {
     );
   } else {
     return (
-      <div>
+      <div style={{ display: "flex", flexDirection: "row" }}>
         <Rooms />
         <Chat />
         <Outlet />
