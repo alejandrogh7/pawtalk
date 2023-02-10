@@ -1,0 +1,28 @@
+.chat_cont {
+  height: 100%;
+  width: 100%;
+  padding: 0 0 0 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.chat_header_data_cont {
+  width: 100%;
+  height: max-content;
+  display: flex;
+  flex-direction: row;
+  align-items: end;
+  justify-content: flex-start;
+  gap: 30px;
+  padding: 10px 0;
+}
+
+.chat_rooname {
+  font-size: 40px;
+  font-weight: bold;
+  text-transform: capitalize;
+  text-align: center;
+  color: whitesmoke;
+}
