@@ -4,3 +4,13 @@
   text-align: center;
   text-transform: capitalize;
 }
+
+@media only screen and (max-width: 1024px) {
+  .not_found_cont {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: start;
+    width: 80%;
+  }
+}
