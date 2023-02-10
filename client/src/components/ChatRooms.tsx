@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import NotFound from "./NotFound";
 import Chat from "../containers/Chat";
 import Rooms from "../containers/Rooms";
+import style from "../styles/ChatRooms.module.css";
 
 type Message = {
   room: string;
@@ -12,11 +13,11 @@ type Message = {
 
 const ChatRooms = () => {
   const { roomID } = useParams();
-  const [messages, setMessages] = useState<Message[] | null>(null);
+  const [messages, setMessages] = useState<Message[] | null>([]);
 
   if (!messages) {
     return (
-      <div style={{ display: "flex", flexDirection: "row" }}>
+      <div className={style.chat_found}>
         <Rooms />
         <NotFound text={`Room "name" not found`} />
         <Outlet />
@@ -24,7 +25,14 @@ const ChatRooms = () => {
     );
   } else {
     return (
-      <div style={{ display: "flex", flexDirection: "row" }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          height: "100%",
+          width: "100%",
+        }}
+      >
         <Rooms />
         <Chat />
         <Outlet />
