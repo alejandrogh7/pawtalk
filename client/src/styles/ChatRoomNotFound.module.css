@@ -1,0 +1,14 @@
+.chat_not_found {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  height: 100%;
+  width: 100%;
+}
+
+@media only screen and (max-width: 1024px) {
+  .chat_not_found {
+    flex-direction: column;
+  }
+}
