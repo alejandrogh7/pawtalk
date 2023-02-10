@@ -4,6 +4,7 @@ import useSearch from "../hooks/useSearch";
 import useOutsideToClose from "../hooks/useOutsideToClose";
 import { Rooms as RoomsInterface } from "../features/rooms/room.interface";
 import logo from "../assets/Search.svg";
+import close from "../assets/Close.svg";
 import style from "../styles/Rooms.module.css";
 
 const rooms: RoomsInterface[] = [
@@ -47,6 +48,26 @@ const rooms: RoomsInterface[] = [
       name: "Monin",
     },
   },
+  {
+    _id: "63e025961e692de698b862q1",
+    image: "",
+    roomname: "Animals 2",
+    description: "Description room 2",
+    creator: {
+      _id: "63e025841e692de698b862ba",
+      name: "Monin",
+    },
+  },
+  {
+    _id: "63e025961e692de698b862q1",
+    image: "",
+    roomname: "Anime",
+    description: "Description room 2",
+    creator: {
+      _id: "63e025841e692de698b862ba",
+      name: "Monin",
+    },
+  },
 ];
 
 const Rooms = () => {
@@ -71,6 +92,9 @@ const Rooms = () => {
   } else
     return (
       <div className={`${style.rooms_list_cont} ${""}`} ref={roomsRef}>
+        <div className={style.rooms_close_cont}>
+          <img src={close} className={style.rooms_close} onClick={() => setOpen(!open)} />
+        </div>
         <form onSubmit={(e) => handleSubmit(e)} className={style.form_search}>
           <input
             type="text"
