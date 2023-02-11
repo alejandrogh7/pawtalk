@@ -1,15 +1,20 @@
-import { useState } from "react";
+import { createRef, useState } from "react";
 import { NavLink } from "react-router-dom";
+import data from "@emoji-mart/data";
+import Picker from "@emoji-mart/react";
+import useOutsideToClose from "../hooks/useOutsideToClose";
 import Emoji from "../assets/Emoji.svg";
+import Close from "../assets/Close.svg";
 import style from "../styles/Chat.module.css";
 
 const Chat = () => {
   const [message, setMessage] = useState<string>("");
-  const [showPicket, setShowPicker] = useState<boolean>(false);
+  const emojisRef = createRef<HTMLDivElement>();
+  const { open, setOpen } = useOutsideToClose(emojisRef);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log();
+    console.log(message);
     setTimeout(() => {
       setMessage("");
     }, 1000);
@@ -79,9 +84,21 @@ const Chat = () => {
           src={Emoji}
           alt="Emoji picker"
           className={style.message_emoji_picker}
-          onClick={() => setShowPicker(!showPicket)}
+          onClick={() => setOpen(!open)}
         />
-
+        {open ? (
+          <div className={style.message_emojis} ref={emojisRef}>
+            <img
+              src={Close}
+              className={style.emojis_close}
+              onClick={() => setOpen(!open)}
+            />
+            <Picker
+              data={data}
+              onEmojiSelect={(e: any) => setMessage((prev) => prev + e.native)}
+            />
+          </div>
+        ) : null}
       </form>
     </div>
   );
