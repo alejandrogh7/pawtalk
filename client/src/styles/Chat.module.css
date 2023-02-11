@@ -127,6 +127,7 @@
   justify-content: center;
   align-items: center;
   gap: 10px;
+  position: relative;
 }
 
 .message_input {
@@ -148,4 +149,45 @@
 
 .message_emoji_picker:hover {
   background-color: rgb(18, 18, 18);
+}
+
+.message_emojis {
+  position: absolute;
+  right: 0;
+  bottom: 80px;
+  width: min-content;
+  background-color: rgb(18, 18, 18);
+  border-radius: 10px;
+}
+
+.emojis_close {
+  color: whitesmoke;
+  filter: invert(1);
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  padding: 5px;
+  border-radius: 50%;
+}
+
+.emojis_close:hover {
+  background-color: whitesmoke;
+}
+
+@media only screen and (max-width: 1024px) {
+  .chat_cont {
+    padding: 0;
+  }
+
+  .user_message {
+    width: 250px;
+  }
+
+  .chat_body_cont {
+    gap: 20px;
+  }
+
+  .message_emojis {
+    bottom: 80px;
+  }
 }

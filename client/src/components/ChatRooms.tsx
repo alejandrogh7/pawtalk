@@ -25,14 +25,7 @@ const ChatRooms = () => {
     );
   } else {
     return (
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          height: "100%",
-          width: "100%",
-        }}
-      >
+      <div className={style.chat_found}>
         <Rooms />
         <Chat />
         <Outlet />
