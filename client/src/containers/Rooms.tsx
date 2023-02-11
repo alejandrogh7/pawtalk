@@ -93,7 +93,11 @@ const Rooms = () => {
     return (
       <div className={`${style.rooms_list_cont} ${""}`} ref={roomsRef}>
         <div className={style.rooms_close_cont}>
-          <img src={close} className={style.rooms_close} onClick={() => setOpen(!open)} />
+          <img
+            src={close}
+            className={style.rooms_close}
+            onClick={() => setOpen(!open)}
+          />
         </div>
         <form onSubmit={(e) => handleSubmit(e)} className={style.form_search}>
           <input
@@ -106,11 +110,11 @@ const Rooms = () => {
           />
         </form>
         <div className={style.rooms_list}>
-          {filteredItems.map((item) => {
+          {filteredItems.map((item, index) => {
             return (
               <NavLink
                 to={`/chat/${item._id}`}
-                key={item._id}
+                key={index}
                 className={style.rooms_list_item}
               >
                 <img
