@@ -3,8 +3,10 @@ import { NavLink } from "react-router-dom";
 import useSearch from "../hooks/useSearch";
 import useOutsideToClose from "../hooks/useOutsideToClose";
 import { Rooms as RoomsInterface } from "../features/rooms/room.interface";
-import logo from "../assets/Search.svg";
-import close from "../assets/Close.svg";
+import Search from "../assets/Search.svg";
+import Close from "../assets/Close.svg";
+import User from "../assets/User.svg";
+import AddUser from "../assets/AddUser.svg";
 import style from "../styles/Rooms.module.css";
 
 const rooms: RoomsInterface[] = [
@@ -83,10 +85,25 @@ const Rooms = () => {
     return (
       <div className={style.no_rooms_lists_cont}>
         <img
-          src={logo}
-          className={style.no_rooms_search}
+          src={Search}
+          className={style.no_rooms_icon}
           onClick={() => setOpen(!open)}
         />
+        <NavLink to="/signin">
+          <img
+            src={User}
+            className={style.no_rooms_icon}
+            onClick={() => setOpen(!open)}
+          />
+        </NavLink>
+
+        <NavLink to="/signup">
+          <img
+            src={AddUser}
+            className={style.no_rooms_icon}
+            onClick={() => setOpen(!open)}
+          />
+        </NavLink>
       </div>
     );
   } else
@@ -94,7 +111,7 @@ const Rooms = () => {
       <div className={`${style.rooms_list_cont} ${""}`} ref={roomsRef}>
         <div className={style.rooms_close_cont}>
           <img
-            src={close}
+            src={Close}
             className={style.rooms_close}
             onClick={() => setOpen(!open)}
           />
