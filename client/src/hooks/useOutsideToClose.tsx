@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, RefObject } from "react";
 
-const useOutsideToClose = (menuRef: any) => {
+const useOutsideToClose = (menuRef: RefObject<HTMLDivElement>) => {
   const [open, setOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
-      if (!menuRef.current.contains(e.target)) {
+      if (!menuRef.current?.contains(e.target)) {
         setOpen(false);
       }
     };
