@@ -1,0 +1,91 @@
+.chat_user_body {
+  width: 100%;
+  height: max-content;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 20px;
+}
+
+.chat_other_body {
+  flex-direction: row;
+}
+
+.chat_my_body {
+  flex-direction: row-reverse;
+}
+
+.user_image {
+  border: 1px solid red;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: contain;
+}
+
+.user_body_data_cont {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.user_data {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.other_data {
+  justify-content: flex-start;
+}
+
+.my_data {
+  justify-content: flex-end;
+}
+
+.user_name {
+  color: whitesmoke;
+  font-size: 16px;
+  text-transform: capitalize;
+  letter-spacing: 0.5px;
+}
+
+.user_date {
+  color: gray;
+  font-size: 16px;
+  text-transform: capitalize;
+}
+
+.user_message {
+  font-size: 18px;
+  width: 700px;
+  max-width: 700px;
+  word-break: keep-all;
+  text-align: start;
+  padding: 10px;
+}
+
+.other_message {
+  border-radius: 0 10px 10px 10px;
+  background-color: whitesmoke;
+  color: black;
+}
+
+.my_message {
+  border-radius: 10px 0 10px 10px;
+  background-color: rgb(18, 18, 18);
+  color: whitesmoke;
+}
+
+@media only screen and (max-width: 1024px) {
+  .user_message {
+    width: 250px;
+  }
+
+  .chat_body_cont {
+    gap: 20px;
+  }
+}
