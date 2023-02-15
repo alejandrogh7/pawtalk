@@ -23,7 +23,27 @@ export class RoomsService {
 
   public async getByID(id: string): Promise<Room | undefined> {
     if (!isValidObjectId(id)) return null;
-    return this.roomModel.findOne({ _id: id }).exec();
+    return this.roomModel
+      .findOne({ _id: id })
+      .select('-__v')
+      .populate({
+        path: 'posts',
+        select: '-__v -room',
+        populate: {
+          path: 'sender',
+          select:
+            '-__v -posts -password -email -rooms -hashedRt -createdAt -updatedAt -createdRooms',
+        },
+      })
+      .populate(
+        'users',
+        '-__v -posts -password -email -rooms -createdAt -updatedAt -hashedRt -createdRooms',
+      )
+      .populate(
+        'creator',
+        '-__v -posts -password -email -rooms -createdAt -updatedAt -hashedRt -createdRooms',
+      )
+      .exec();
   }
 
   public async create(payload: CreateRoomInput): Promise<Room> {
@@ -56,10 +76,9 @@ export class RoomsService {
   public findAll(): Promise<Room[]> {
     return this.roomModel
       .find()
-      .select('-__v')
-      .populate('posts', '-__v -sender -createdAt -updatedAt -room')
+      .select('-__v -posts -users -createdAt -updatedAt')
       .populate(
-        'users',
+        'creator',
         '-__v -posts -password -email -rooms -createdAt -updatedAt -hashedRt -createdRooms',
       )
       .exec();
