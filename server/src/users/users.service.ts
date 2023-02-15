@@ -30,7 +30,27 @@ export class UsersService {
 
   public getByID(id: string): Promise<User | undefined> {
     if (!isValidObjectId(id)) return null;
-    return this.userModel.findOne({ _id: id }).exec();
+    return this.userModel
+      .findOne({ _id: id })
+      .select('-password -__v')
+      .populate({
+        path: 'posts',
+        select: '-__v -sender -createdAt -updatedAt',
+        populate: {
+          path: 'room',
+          select:
+            '-__v -description -createdAt -updatedAt -creator -posts -users',
+        },
+      })
+      .populate(
+        'rooms',
+        '-__v -description -createdAt -updatedAt -creator -posts -users',
+      )
+      .populate(
+        'createdRooms',
+        '-__v -description -createdAt -updatedAt -creator -posts -users',
+      )
+      .exec();
   }
 
   public async create(payload: CreateUserDto): Promise<User> {
@@ -52,15 +72,8 @@ export class UsersService {
   public findAll(): Promise<User[]> {
     return this.userModel
       .find()
-      .select('-password -__v')
-      .populate('posts', '-__v -sender -room -createdAt -updatedAt')
-      .populate(
-        'rooms',
-        '-__v -description -createdAt -updatedAt -creator -posts -users',
-      )
-      .populate(
-        'createdRooms',
-        '-__v -description -createdAt -updatedAt -creator -posts -users',
+      .select(
+        '-password -__v -rooms -posts -createdRooms -hashedRt -createdAt -updatedAt',
       )
       .exec();
   }
