@@ -51,6 +51,14 @@ export class PostsService {
   public findAll(): Promise<Post[]> {
     return this.postModel
       .find()
+      .select('-__v -createdAt -updatedAt -sender -room')
+      .exec();
+  }
+
+  public getByID(id: string): Promise<Post | undefined> {
+    if (!isValidObjectId(id)) return null;
+    return this.postModel
+      .findOne({ _id: id })
       .select('-__v')
       .populate(
         'sender',
@@ -61,11 +69,6 @@ export class PostsService {
         '-__v -posts -users -description -createdAt -updatedAt -creator',
       )
       .exec();
-  }
-
-  public getByID(id: string): Promise<Post | undefined> {
-    if (!isValidObjectId(id)) return null;
-    return this.postModel.findOne({ _id: id }).exec();
   }
 
   public async update(id: string, payload: UpdatePostDto): Promise<boolean> {
