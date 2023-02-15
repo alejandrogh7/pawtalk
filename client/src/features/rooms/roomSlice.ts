@@ -1,10 +1,11 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState, AppThunk } from "../../app/store";
+import { Room, Rooms } from "./room.interface";
 import { fetchRooms, fetchRoom } from "./roomAPI";
 
 export interface RoomState {
-  rooms: any[] | null;
-  room: any | null;
+  rooms: Rooms[] | null;
+  room: Room | null;
 }
 
 const initialState: RoomState = {
@@ -14,14 +15,14 @@ const initialState: RoomState = {
 
 export const getAllRooms = createAsyncThunk("rooms/fetchRooms", async () => {
   const response = await fetchRooms();
-  return response.data;
+  return response;
 });
 
 export const getAllRoom = createAsyncThunk(
   "rooms/fetchRoom",
   async (id: string) => {
     const response = await fetchRoom(id);
-    return response.data;
+    return response;
   }
 );
 
