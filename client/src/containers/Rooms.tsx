@@ -1,78 +1,24 @@
-import React, { createRef } from "react";
+import React, { createRef, useEffect } from "react";
 import { NavLink } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getAllRooms,
+  selectRooms,
+  clearRooms,
+} from "../features/rooms/roomSlice";
 import useSearch from "../hooks/useSearch";
 import useOutsideToClose from "../hooks/useOutsideToClose";
-import { Rooms as RoomsInterface } from "../features/rooms/room.interface";
 import Search from "../assets/Search.svg";
 import Close from "../assets/Close.svg";
 import User from "../assets/User.svg";
 import AddUser from "../assets/AddUser.svg";
 import style from "../styles/Rooms.module.css";
-
-const rooms: RoomsInterface[] = [
-  {
-    _id: "63e025961e692de698b862c1",
-    image: "",
-    roomname: "Room 1",
-    description: "Description room 1",
-    creator: {
-      _id: "63e025841e692de698b862bb",
-      name: "Pulga",
-    },
-  },
-  {
-    _id: "63e025961e692de698b862n1",
-    image: "",
-    roomname: "Room 2",
-    description: "Description room 2",
-    creator: {
-      _id: "63e025841e692de698b862ba",
-      name: "Monin",
-    },
-  },
-  {
-    _id: "63e025961e692de698b862a1",
-    image: "",
-    roomname: "Games",
-    description: "Description room 2",
-    creator: {
-      _id: "63e025841e692de698b862ba",
-      name: "Monin",
-    },
-  },
-  {
-    _id: "63e025961e692de698b862q1",
-    image: "",
-    roomname: "Animals",
-    description: "Description room 2",
-    creator: {
-      _id: "63e025841e692de698b862ba",
-      name: "Monin",
-    },
-  },
-  {
-    _id: "63e025961e692de698b862q1",
-    image: "",
-    roomname: "Animals 2",
-    description: "Description room 2",
-    creator: {
-      _id: "63e025841e692de698b862ba",
-      name: "Monin",
-    },
-  },
-  {
-    _id: "63e025961e692de698b862q1",
-    image: "",
-    roomname: "Anime",
-    description: "Description room 2",
-    creator: {
-      _id: "63e025841e692de698b862ba",
-      name: "Monin",
-    },
-  },
-];
+import { AppDispatch } from "../app/store";
 
 const Rooms = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const rooms = useSelector(selectRooms);
+
   const roomsRef = createRef<HTMLDivElement>();
   const { searchTerm, filteredItems, setSearchTerm } = useSearch(rooms);
   const { open, setOpen } = useOutsideToClose(roomsRef);
@@ -80,6 +26,14 @@ const Rooms = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
+
+  useEffect(() => {
+    dispatch(getAllRooms());
+
+    return () => {
+      dispatch(clearRooms());
+    };
+  }, []);
 
   if (!open) {
     return (
@@ -135,7 +89,7 @@ const Rooms = () => {
                 className={style.rooms_list_item}
               >
                 <img
-                  src={item.image}
+                  // src={item.image}
                   alt={`${item.roomname} image`}
                   className={style.item_image}
                 />
