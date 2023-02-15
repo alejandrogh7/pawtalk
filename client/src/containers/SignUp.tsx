@@ -12,6 +12,7 @@ const SignUp = () => {
   const {
     register,
     setValue,
+    watch,
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>({
@@ -21,13 +22,34 @@ const SignUp = () => {
       password: "",
       confirmPassword: "",
     },
+    mode: "onBlur",
   });
+
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     console.log(data);
     setValue("email", "");
     setValue("username", "");
     setValue("password", "");
     setValue("confirmPassword", "");
+  };
+
+  const passwordValidation = (password: string) => {
+    if (password.length < 8) {
+      return "Password must be at least 8 characters long";
+    }
+    if (!/\d/.test(password)) {
+      return "Password must contain at least one number";
+    }
+    if (!/[A-Z]/.test(password)) {
+      return "Password must contain at least one uppercase letter";
+    }
+    if (!/[a-z]/.test(password)) {
+      return "Password must contain at least one lowercase letter";
+    }
+    if (!/[@$!%*#?&]/.test(password)) {
+      return "Password must contain at least one special character";
+    }
+    return true;
   };
 
   return (
@@ -53,7 +75,7 @@ const SignUp = () => {
           className={style.form_input}
           {...register("username", {
             required: true,
-            pattern: /^[a-zA-Z._]{5,20}$/,
+            pattern: /^[a-zA-Z0-9._]{5,20}$/,
           })}
         />
         {errors.email && <span>Invalid email</span>}
@@ -67,9 +89,10 @@ const SignUp = () => {
             required: true,
             pattern:
               /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&^><==_}]{8,20}$/,
+            validate: (value: string) => passwordValidation(value) === true,
           })}
         />
-        {errors.password && <span>Invalid password</span>}
+        {errors.password && <span>{errors.password.message}</span>}
       </div>
       <div className={style.form_input_cont}>
         <input
@@ -80,9 +103,13 @@ const SignUp = () => {
             required: true,
             pattern:
               /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&^><==_}]{8,20}$/,
+            validate: (value: string) =>
+              value === watch("password") || "The password do not match",
           })}
         />
-        {errors.password && <span>Invalid password</span>}
+        {errors.confirmPassword && (
+          <span>{errors.confirmPassword.message}</span>
+        )}
       </div>
       <div className={style.form_input_cont}>
         <input type="submit" value="Sign up" className={style.form_submit} />
