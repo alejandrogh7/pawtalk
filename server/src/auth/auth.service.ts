@@ -6,6 +6,7 @@ import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { User } from 'src/users/entities/user.entity';
 import { Tokens } from './types/tokens.type';
 import { SigninDto } from './dto/signin.dto';
+import { SignInResponse } from './types/signin.type';
 
 @Injectable()
 export class AuthService {
@@ -59,12 +60,12 @@ export class AuthService {
         'Can not create user',
       );
     }
-    const tokens = await this.getToken(user._id, user.email);
-    await this.updatedRtHash(user._id, tokens.refresh_token);
-    return tokens;
+    // const tokens = await this.getToken(user._id, user.email);
+    // await this.updatedRtHash(user._id, tokens.refresh_token);
+    return true;
   }
 
-  async signin(payload: SigninDto): Promise<Tokens> {
+  async signin(payload: SigninDto): Promise<SignInResponse> {
     const getByEmail = await this.userService.getByEmail(payload.email);
     if (!getByEmail) {
       throw new ForbiddenException('EMAIL_NOT_FOUND', 'Access Denied');
@@ -80,7 +81,7 @@ export class AuthService {
 
     const tokens = await this.getToken(getByEmail._id, getByEmail.email);
     await this.updatedRtHash(getByEmail._id, tokens.refresh_token);
-    return tokens;
+    return { user: getByEmail, tokens };
   }
 
   async logout(userId: string): Promise<boolean> {
