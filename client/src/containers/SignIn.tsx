@@ -1,4 +1,12 @@
+import { useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../app/store";
+import {
+  fetchSignIn,
+  selectSignIn,
+  clearSignup,
+} from "../features/users/userSlice";
 import style from "../styles/Sign.module.css";
 
 type Inputs = {
@@ -7,6 +15,9 @@ type Inputs = {
 };
 
 const SignIn = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const signin = useSelector(selectSignIn);
+
   const {
     register,
     setValue,
@@ -19,10 +30,17 @@ const SignIn = () => {
     },
   });
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data);
-    setValue("password", "");
-    setValue("email", "");
+    dispatch(fetchSignIn(data));
+
+    setTimeout(() => {
+      setValue("password", "");
+      setValue("email", "");
+    }, 1000);
   };
+
+  useEffect(() => {
+    dispatch(clearSignup());
+  }, []);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={style.signin_cont}>
@@ -55,7 +73,7 @@ const SignIn = () => {
       </div>
       <div className={style.form_input_cont}>
         <input type="submit" value="Sign in" className={style.form_submit} />
-      </div>     
+      </div>
     </form>
   );
 };
