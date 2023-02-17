@@ -1,6 +1,7 @@
 import React, { createRef, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../app/store";
 import {
   getAllRooms,
   selectRooms,
@@ -13,7 +14,6 @@ import Close from "../assets/Close.svg";
 import User from "../assets/User.svg";
 import AddUser from "../assets/AddUser.svg";
 import style from "../styles/Rooms.module.css";
-import { AppDispatch } from "../app/store";
 
 const Rooms = () => {
   const dispatch = useDispatch<AppDispatch>();
