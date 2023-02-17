@@ -25,6 +25,7 @@ export class UsersService {
   public getByEmail(email: string): Promise<User | undefined> {
     return this.userModel
       .findOne({ email: email.toLocaleLowerCase().trim() })
+      .select('-hashedRt -__v')
       .exec();
   }
 
