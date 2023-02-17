@@ -1,14 +1,24 @@
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../app/store";
+import { fetchSignUp, selectSignUp } from "../features/users/userSlice";
 import style from "../styles/Sign.module.css";
+import { useEffect } from "react";
 
 type Inputs = {
   email: string;
-  username: string;
+  name: string;
   password: string;
   confirmPassword: string;
 };
 
 const SignUp = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const signup = useSelector(selectSignUp);
+
+  const navigate = useNavigate();
+
   const {
     register,
     setValue,
@@ -18,7 +28,7 @@ const SignUp = () => {
   } = useForm<Inputs>({
     defaultValues: {
       email: "",
-      username: "",
+      name: "",
       password: "",
       confirmPassword: "",
     },
@@ -26,12 +36,22 @@ const SignUp = () => {
   });
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data);
-    setValue("email", "");
-    setValue("username", "");
-    setValue("password", "");
-    setValue("confirmPassword", "");
+    const { confirmPassword, ...signUpData } = data;
+    dispatch(fetchSignUp(signUpData));
+
+    setTimeout(() => {
+      setValue("email", "");
+      setValue("name", "");
+      setValue("password", "");
+      setValue("confirmPassword", "");
+    }, 1000);
   };
+
+  useEffect(() => {
+    if (signup) {
+      return navigate("/signin", { replace: true });
+    }
+  }, [signup]);
 
   const passwordValidation = (password: string) => {
     if (password.length < 8) {
@@ -71,14 +91,14 @@ const SignUp = () => {
       <div className={style.form_input_cont}>
         <input
           type="text"
-          placeholder="Username"
+          placeholder="Name"
           className={style.form_input}
-          {...register("username", {
+          {...register("name", {
             required: true,
             pattern: /^[a-zA-Z0-9._]{5,20}$/,
           })}
         />
-        {errors.email && <span>Invalid email</span>}
+        {errors.name && <span>Invalid name</span>}
       </div>
       <div className={style.form_input_cont}>
         <input
