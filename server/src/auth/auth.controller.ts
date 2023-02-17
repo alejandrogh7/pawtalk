@@ -7,18 +7,19 @@ import { Tokens } from './types/tokens.type';
 import { SigninDto } from './dto/signin.dto';
 import { GetCurrentUserID } from './decorators/get-current-user.decorator-id';
 import { GetCurrentUser } from './decorators/get-current-user.decorator';
+import { SignInResponse } from './types/signin.type';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('/signup')
-  signup(@Body() payload: CreateUserDto): Promise<Tokens> {
+  signup(@Body() payload: CreateUserDto): Promise<boolean> {
     return this.authService.signup(payload);
   }
 
   @Post('/signin')
-  signin(@Body() payload: SigninDto): Promise<Tokens> {
+  signin(@Body() payload: SigninDto): Promise<SignInResponse> {
     return this.authService.signin(payload);
   }
 
