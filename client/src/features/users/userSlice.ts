@@ -1,16 +1,19 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState, AppThunk } from "../../app/store";
-import { SigninPayload, SigninResponse, SignupPayload } from "./user.interface";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import Cookies from "js-cookie";
+import { RootState } from "../../app/store";
+import { SigninPayload, SignupPayload, User } from "./user.interface";
 import { fetchLogin, fetchRegister } from "./userAPI";
 
 export interface RoomState {
   signup: boolean;
-  signin: SigninResponse | null;
+  signin: User | null;
 }
 
 const initialState: RoomState = {
   signup: false,
-  signin: null,
+  signin: localStorage.getItem("user")
+    ? JSON.parse(localStorage.getItem("user") || "")
+    : null,
 };
 
 export const fetchSignUp = createAsyncThunk(
@@ -37,6 +40,9 @@ export const userSlice = createSlice({
       state.signup = false;
     },
     clearSignin: (state) => {
+      localStorage.removeItem("user");
+      Cookies.remove("access_token");
+      Cookies.remove("refresh_token");
       state.signin = null;
     },
   },
@@ -58,7 +64,13 @@ export const userSlice = createSlice({
         state.signin = null;
       })
       .addCase(fetchSignIn.fulfilled, (state, action) => {
-        state.signin = action.payload;
+        const { user, tokens } = action.payload;
+
+        Cookies.set("access_token", tokens.access_token);
+        Cookies.set("refresh_token", tokens.refresh_token);
+
+        localStorage.setItem("user", JSON.stringify(user));
+        state.signin = user;
       });
   },
 });
