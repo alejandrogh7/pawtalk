@@ -48,6 +48,7 @@ export class PostsGateway
       );
     }
 
+    // this.wss.to(`room ${room.roomname}`).emit('room', room);
     client.emit('room', room);
   }
 
@@ -65,7 +66,8 @@ export class PostsGateway
     const createdPost = await this.postsService.create(payload);
     const getCreatedPost = await this.postsService.getByID(createdPost._id);
 
-    this.wss.to(`room ${room.roomname}`).emit('message', getCreatedPost);
+    // this.wss.to(`room ${room.roomname}`).emit('message', getCreatedPost);
+    client.emit('message', getCreatedPost);
   }
 
   @SubscribeMessage('joinRoom')
