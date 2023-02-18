@@ -15,28 +15,53 @@ import style from "../styles/Chat.module.css";
 
 const Chat = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const room = useSelector(selectRoom);
 
   const params = useParams();
 
+  const [room, setRoom] = useState<any>();
+
+  const [socket, setSocket] = useState<any | null>(null);
   const [message, setMessage] = useState<string>("");
+  const [messages, setMessages] = useState<Post[]>([]);
+
   const emojisRef = createRef<HTMLDivElement>();
   const { open, setOpen } = useOutsideToClose(emojisRef);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(message);
-    setTimeout(() => {
-      setMessage("");
-    }, 1000);
+    socket?.emit("messageRoom", {
+      room: params.roomID,
+      text: message,
+      sender: "63e025841e692de698b862bb",
+    });
+    setMessage("");
   };
 
   useEffect(() => {
-    dispatch(getAllRoom(params.roomID ? params.roomID : ""));
+    const newSocket = io(import.meta.env.VITE_API_SOCKET_URL);
+    newSocket.on("connect", () => {
+      setSocket(newSocket);
+    });
+
+    newSocket.emit("joinRoom", params.roomID);
+
+    newSocket.emit("room", params.roomID);
+
+    newSocket.on("room", (room: any) => {
+      setRoom(room);
+      setMessages(room.posts);
+    });
     return () => {
-      dispatch(clearRoom());
+      newSocket.disconnect();
     };
   }, []);
+
+  useEffect(() => {
+    if (!socket) return;
+    socket.on("message", (payload: any) => {
+      setMessages([...messages, payload]);
+    });
+  }, [socket]);
 
   if (!room) {
     return (
@@ -53,7 +78,7 @@ const Chat = () => {
           </NavLink>
         </div>
         <div className={style.chat_body_cont}>
-          {room.posts.map((post: Post, index: number) => {
+          {messages.map((post: Post, index: number) => {
             return (
               <ChatContent
                 index={index}
