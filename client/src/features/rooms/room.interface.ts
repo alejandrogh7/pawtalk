@@ -38,3 +38,9 @@ export interface Room {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface CreateRoom {
+  roomname: string;
+  description: string;
+  userId: string;
+}
