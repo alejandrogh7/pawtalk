@@ -1,3 +1,4 @@
+import useUser from "../hooks/useUser";
 import style from "../styles/ChatContent.module.css";
 
 interface ChatContentProps {
@@ -15,7 +16,9 @@ const ChatContent: React.FC<ChatContentProps> = ({
   createdAt,
   text,
 }) => {
-  if (sender_id === "1") {
+  const { user } = useUser();
+
+  if (sender_id === user?._id) {
     return (
       <div
         className={`${style.chat_user_body} ${style.chat_my_body}`}
