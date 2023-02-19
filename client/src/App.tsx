@@ -1,12 +1,12 @@
 import { Routes, Route, useNavigate } from "react-router-dom";
 import ChatRooms from "./components/ChatRooms";
-import Home from "./components/Home";
 import ChatRoomNotFound from "./components/ChatRoomNotFound";
 import "./styles/App.css";
 import SignInCont from "./components/SignInCont";
 import SignUpCont from "./components/SignUpCont";
 import { useEffect } from "react";
 import useCookies from "./hooks/useCookies";
+import CreateRoomCont from "./components/CreateRoomCont";
 
 function App() {
   // const { aToken, rToken } = useCookies();
@@ -22,7 +22,9 @@ function App() {
   return (
     <div className="App">
       <Routes>
-        {/* <Route path="/" element={<Home />} /> */}
+        <Route path="/room">
+          <Route path="/room/create" element={<CreateRoomCont />} />
+        </Route>
         <Route path="/chat/">
           <Route path="/chat/" element={<ChatRoomNotFound />} />
           <Route path="/chat/:roomID" element={<ChatRooms />} />
