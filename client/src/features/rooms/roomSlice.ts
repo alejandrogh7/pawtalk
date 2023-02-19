@@ -1,16 +1,18 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
-import { Room, Rooms } from "./room.interface";
-import { fetchRooms, fetchRoom } from "./roomAPI";
+import { CreateRoom, Room, Rooms } from "./room.interface";
+import { fetchRooms, fetchRoom, fetchCreateRoom } from "./roomAPI";
 
 export interface RoomState {
   rooms: Rooms[] | null;
   room: Room | null;
+  createdRoom: boolean;
 }
 
 const initialState: RoomState = {
   rooms: null,
   room: null,
+  createdRoom: false,
 };
 
 export const getAllRooms = createAsyncThunk("rooms/fetchRooms", async () => {
@@ -26,6 +28,14 @@ export const getAllRoom = createAsyncThunk(
   }
 );
 
+export const createRoom = createAsyncThunk(
+  "rooms/fetchCreateRoom",
+  async (payload: CreateRoom) => {
+    const response = await fetchCreateRoom(payload);
+    return response;
+  }
+);
+
 export const roomSlice = createSlice({
   name: "room",
   initialState,
@@ -35,6 +45,9 @@ export const roomSlice = createSlice({
     },
     clearRoom: (state) => {
       state.rooms = null;
+    },
+    clearCreatedRoom: (state) => {
+      state.createdRoom = false;
     },
   },
   extraReducers: (builder) => {
@@ -56,14 +69,26 @@ export const roomSlice = createSlice({
       })
       .addCase(getAllRoom.fulfilled, (state, action) => {
         state.room = action.payload;
+      })
+      .addCase(createRoom.pending, (state) => {
+        state.createdRoom = false;
+      })
+      .addCase(createRoom.rejected, (state) => {
+        state.createdRoom = false;
+      })
+      .addCase(createRoom.fulfilled, (state, action) => {
+        state.createdRoom = true;
+        state.room = action.payload;
       });
   },
 });
 
-export const { clearRoom, clearRooms } = roomSlice.actions;
+export const { clearRoom, clearRooms, clearCreatedRoom } = roomSlice.actions;
 
 export const selectRooms = (state: RootState) => state.rooms.rooms;
 
 export const selectRoom = (state: RootState) => state.rooms.room;
+
+export const selectCreatedRoom = (state: RootState) => state.rooms.createdRoom;
 
 export default roomSlice.reducer;
