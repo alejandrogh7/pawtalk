@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { AppDispatch } from "../app/store";
 import {
   fetchSignIn,
@@ -15,6 +16,8 @@ type Inputs = {
 };
 
 const SignIn = () => {
+  const navigate = useNavigate();
+
   const dispatch = useDispatch<AppDispatch>();
   const signin = useSelector(selectSignIn);
 
@@ -36,6 +39,8 @@ const SignIn = () => {
       setValue("password", "");
       setValue("email", "");
     }, 1000);
+
+    return navigate("/chat", { replace: true });
   };
 
   useEffect(() => {
