@@ -1,5 +1,5 @@
-import React, { createRef, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import React, { createRef, Fragment, useEffect } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../app/store";
 import {
@@ -7,15 +7,23 @@ import {
   selectRooms,
   clearRooms,
 } from "../features/rooms/roomSlice";
+import { clearSignin } from "../features/users/userSlice";
+import useUser from "../hooks/useUser";
 import useSearch from "../hooks/useSearch";
 import useOutsideToClose from "../hooks/useOutsideToClose";
 import Search from "../assets/Search.svg";
 import Close from "../assets/Close.svg";
 import User from "../assets/User.svg";
 import AddUser from "../assets/AddUser.svg";
+import ChatAdd from "../assets/ChatAdd.svg";
+import UserOut from "../assets/UserOut.svg";
 import style from "../styles/Rooms.module.css";
 
 const Rooms = () => {
+  const navigate = useNavigate();
+
+  const { user } = useUser();
+
   const dispatch = useDispatch<AppDispatch>();
   const rooms = useSelector(selectRooms);
 
@@ -25,6 +33,11 @@ const Rooms = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+  };
+
+  const handleLogOut = () => {
+    dispatch(clearSignin());
+    return navigate("/signin", { replace: true });
   };
 
   useEffect(() => {
@@ -43,21 +56,27 @@ const Rooms = () => {
           className={style.no_rooms_icon}
           onClick={() => setOpen(!open)}
         />
-        <NavLink to="/signin">
-          <img
-            src={User}
-            className={style.no_rooms_icon}
-            onClick={() => setOpen(!open)}
-          />
+        <NavLink to="/room/create">
+          <img src={ChatAdd} className={style.no_rooms_icon} />
         </NavLink>
-
-        <NavLink to="/signup">
-          <img
-            src={AddUser}
-            className={style.no_rooms_icon}
-            onClick={() => setOpen(!open)}
-          />
-        </NavLink>
+        {!user?._id ? (
+          <Fragment>
+            <NavLink to="/signin">
+              <img src={User} className={style.no_rooms_icon} />
+            </NavLink>
+            <NavLink to="/signup">
+              <img src={AddUser} className={style.no_rooms_icon} />
+            </NavLink>
+          </Fragment>
+        ) : (
+          <Fragment>
+            <img
+              src={UserOut}
+              className={style.no_rooms_icon}
+              onClick={() => handleLogOut()}
+            />
+          </Fragment>
+        )}
       </div>
     );
   } else
