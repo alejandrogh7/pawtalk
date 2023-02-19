@@ -12,9 +12,12 @@ import useOutsideToClose from "../hooks/useOutsideToClose";
 import Emoji from "../assets/Emoji.svg";
 import Close from "../assets/Close.svg";
 import style from "../styles/Chat.module.css";
+import useUser from "../hooks/useUser";
 
 const Chat = () => {
   const dispatch = useDispatch<AppDispatch>();
+
+  const { user } = useUser();
 
   const params = useParams();
 
@@ -32,7 +35,7 @@ const Chat = () => {
     socket?.emit("messageRoom", {
       room: params.roomID,
       text: message,
-      sender: "63e025841e692de698b862bb",
+      sender: user?._id,
     });
     setMessage("");
   };
@@ -62,6 +65,8 @@ const Chat = () => {
       setMessages([...messages, payload]);
     });
   }, [socket]);
+
+  console.log(messages);
 
   if (!room) {
     return (
