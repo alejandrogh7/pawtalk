@@ -7,17 +7,12 @@ import Picker from "@emoji-mart/react";
 import { AppDispatch } from "../app/store";
 import ChatContent from "../components/ChatContent";
 import { getAllRoom, clearRoom, selectRoom } from "../features/rooms/roomSlice";
-import { Post, Room } from "../features/rooms/room.interface";
+import { Post } from "../features/rooms/room.interface";
+import useUser from "../hooks/useUser";
 import useOutsideToClose from "../hooks/useOutsideToClose";
 import Emoji from "../assets/Emoji.svg";
 import Close from "../assets/Close.svg";
 import style from "../styles/Chat.module.css";
-import useUser from "../hooks/useUser";
-
-interface Message {
-  room: string;
-  message: string;
-}
 
 const Chat = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -56,7 +51,7 @@ const Chat = () => {
     const newSocket = io(import.meta.env.VITE_API_SOCKET_URL);
     newSocket.on("connect", () => {
       setSocket(newSocket);
-      dispatch(getAllRoom(roomID));
+      dispatch(getAllRoom(params.roomID || ""));
     });
     return () => {
       newSocket.disconnect();
@@ -86,6 +81,18 @@ const Chat = () => {
     });
   }, [socket]);
 
+  useEffect(() => {
+    dispatch(clearRoom());
+    setRoomID(params.roomID || "");
+    dispatch(getAllRoom(params.roomID || ""));
+  }, [params.roomID]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearRoom());
+    };
+  }, []);
+
   if (!room) {
     return (
       <div className={style.chat_cont}>
@@ -100,6 +107,7 @@ const Chat = () => {
             {room.roomname}
           </NavLink>
         </div>
+        <hr style={{ width: "100%" }} />
         <div className={style.chat_body_cont}>
           {messages.map((post: Post, index: number) => {
             return (
