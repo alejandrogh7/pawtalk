@@ -6,9 +6,12 @@ import { createRoom } from "../features/rooms/roomSlice";
 import style from "../styles/CreateRoom.module.css";
 import { CreateRoom as CreateRoomDTO } from "../features/rooms/room.interface";
 import { AppDispatch } from "../app/store";
+import { useNavigate } from "react-router-dom";
 
 const CreateRoom = () => {
   const dispatch = useDispatch<AppDispatch>();
+
+  const navigate = useNavigate();
 
   const { user } = useUser();
 
@@ -32,6 +35,10 @@ const CreateRoom = () => {
       setValue("roomname", "");
       setValue("description", "");
     }, 1000);
+
+    setTimeout(() => {
+      return navigate("/chat", { replace: true });
+    }, 1200);
   };
 
   useEffect(() => {
@@ -48,9 +55,9 @@ const CreateRoom = () => {
           className={style.form_input}
           {...register("roomname", {
             required: true,
-            pattern: /^[a-zA-Z]+(\s[a-zA-Z]+)*\s?[a-zA-Z]{4,20}$/,
+            pattern: /^[a-zA-Z]+(\s[a-zA-Z]+)*\s?[a-zA-Z]{3,20}$/,
             maxLength: 20,
-            minLength: 4,
+            minLength: 3,
           })}
         />
         {errors.roomname && <span>Just use letters and spaces</span>}
@@ -61,8 +68,8 @@ const CreateRoom = () => {
           className={style.form_textarea}
           {...register("description", {
             required: true,
-            pattern: /^[a-zA-Z0-9 ]{9,40}$/,
-            maxLength: 40,
+            pattern: /^[a-zA-Z0-9 ]{9,100}$/,
+            maxLength: 100,
             minLength: 9,
           })}
         />
