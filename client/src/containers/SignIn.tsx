@@ -31,6 +31,7 @@ const SignIn = () => {
       email: "",
       password: "",
     },
+    mode: "onBlur",
   });
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     dispatch(fetchSignIn(data));
@@ -63,7 +64,11 @@ const SignIn = () => {
               /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/,
           })}
         />
-        {errors.email && <span>Invalid email</span>}
+        {errors.email && (
+          <span className={style.input_error}>
+            It should be a valid email address!
+          </span>
+        )}
       </div>
       <div className={style.form_input_cont}>
         <input
@@ -76,7 +81,12 @@ const SignIn = () => {
               /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&^><==_}]{8,20}$/,
           })}
         />
-        {errors.password && <span>Invalid password</span>}
+        {errors.password && (
+          <span className={style.input_error}>
+            Password should be 8-20 characters and include at least 1 capital
+            letter (A), 1 number (1) and 1 special character ($)!
+          </span>
+        )}
       </div>
       <div className={style.form_input_cont}>
         <input type="submit" value="Sign in" className={style.form_submit} />

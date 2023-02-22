@@ -53,25 +53,6 @@ const SignUp = () => {
     }
   }, [signup]);
 
-  const passwordValidation = (password: string) => {
-    if (password.length < 8) {
-      return "Password must be at least 8 characters long";
-    }
-    if (!/\d/.test(password)) {
-      return "Password must contain at least one number";
-    }
-    if (!/[A-Z]/.test(password)) {
-      return "Password must contain at least one uppercase letter";
-    }
-    if (!/[a-z]/.test(password)) {
-      return "Password must contain at least one lowercase letter";
-    }
-    if (!/[@$!%*#?&]/.test(password)) {
-      return "Password must contain at least one special character";
-    }
-    return true;
-  };
-
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={style.signin_cont}>
       <h1 className={style.form_title}>Sign Up</h1>
@@ -86,7 +67,11 @@ const SignUp = () => {
               /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/,
           })}
         />
-        {errors.email && <span>Invalid email</span>}
+        {errors.email && (
+          <span className={style.input_error}>
+            It should be a valid email address!
+          </span>
+        )}
       </div>
       <div className={style.form_input_cont}>
         <input
@@ -98,7 +83,12 @@ const SignUp = () => {
             pattern: /^[a-zA-Z0-9._]{5,20}$/,
           })}
         />
-        {errors.name && <span>Invalid name</span>}
+        {errors.name && (
+          <span className={style.input_error}>
+            Username should be 5-20 characters and shouldn't include any special
+            character just underscore (_)!
+          </span>
+        )}
       </div>
       <div className={style.form_input_cont}>
         <input
@@ -109,10 +99,14 @@ const SignUp = () => {
             required: true,
             pattern:
               /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&^><==_}]{8,20}$/,
-            validate: (value: string) => passwordValidation(value) === true,
           })}
         />
-        {errors.password && <span>{errors.password.message}</span>}
+        {errors.password && (
+          <span className={style.input_error}>
+            Password should be 8-20 characters and include at least 1 capital
+            letter (A), 1 number (1) and 1 special character ($)!
+          </span>
+        )}
       </div>
       <div className={style.form_input_cont}>
         <input
@@ -128,7 +122,7 @@ const SignUp = () => {
           })}
         />
         {errors.confirmPassword && (
-          <span>{errors.confirmPassword.message}</span>
+          <span className={style.input_error}>Passwords don't match!</span>
         )}
       </div>
       <div className={style.form_input_cont}>

@@ -26,6 +26,7 @@ const CreateRoom = () => {
       description: "",
       userId: "",
     },
+    mode: "onBlur",
   });
 
   const onSubmit: SubmitHandler<CreateRoomDTO> = (data) => {
@@ -60,7 +61,11 @@ const CreateRoom = () => {
             minLength: 3,
           })}
         />
-        {errors.roomname && <span>Just use letters and spaces</span>}
+        {errors.roomname && (
+          <span className={style.input_error}>
+            Roomname should be 4-20 characters and inlude letters
+          </span>
+        )}
       </div>
       <div className={style.form_input_cont}>
         <textarea
@@ -73,7 +78,12 @@ const CreateRoom = () => {
             minLength: 9,
           })}
         />
-        {errors.description && <span>Min and Max length (10 - 40)</span>}
+        {errors.description && (
+          <span className={style.input_error}>
+            Description should be 9-100 characters and include letters and
+            numbers!
+          </span>
+        )}
       </div>
       <div className={style.form_input_cont}>
         <input
