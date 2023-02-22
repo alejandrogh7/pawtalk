@@ -7,33 +7,45 @@ import Picker from "@emoji-mart/react";
 import { AppDispatch } from "../app/store";
 import ChatContent from "../components/ChatContent";
 import { getAllRoom, clearRoom, selectRoom } from "../features/rooms/roomSlice";
-import { Post } from "../features/rooms/room.interface";
+import { Post, Room } from "../features/rooms/room.interface";
 import useOutsideToClose from "../hooks/useOutsideToClose";
 import Emoji from "../assets/Emoji.svg";
 import Close from "../assets/Close.svg";
 import style from "../styles/Chat.module.css";
 import useUser from "../hooks/useUser";
 
+interface Message {
+  room: string;
+  message: string;
+}
+
 const Chat = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const room = useSelector(selectRoom);
 
   const { user } = useUser();
-
   const params = useParams();
-
-  const [room, setRoom] = useState<any>();
-
-  const [socket, setSocket] = useState<any | null>(null);
-  const [message, setMessage] = useState<string>("");
-  const [messages, setMessages] = useState<Post[]>([]);
 
   const emojisRef = createRef<HTMLDivElement>();
   const { open, setOpen } = useOutsideToClose(emojisRef);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const [roomID, setRoomID] = useState<string>(params.roomID || "");
+  const [socket, setSocket] = useState<any | null>(null);
+  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState<Post[]>([]);
+
+  const joinRoom = (roomID: string) => {
+    socket!.emit("joinRoom", roomID);
+  };
+
+  const leaveRoom = (roomID: string) => {
+    socket!.emit("leaveRoom", roomID);
+  };
+
+  const sendMessage = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    socket?.emit("messageRoom", {
-      room: params.roomID,
+    socket!.emit("messageRoom", {
+      room: roomID,
       text: message,
       sender: user?._id,
     });
@@ -44,29 +56,35 @@ const Chat = () => {
     const newSocket = io(import.meta.env.VITE_API_SOCKET_URL);
     newSocket.on("connect", () => {
       setSocket(newSocket);
-    });
-
-    newSocket.emit("joinRoom", params.roomID);
-
-    newSocket.emit("room", params.roomID);
-
-    newSocket.on("room", (room: any) => {
-      setRoom(room);
-      setMessages(room.posts);
+      dispatch(getAllRoom(roomID));
     });
     return () => {
       newSocket.disconnect();
+      setMessages([]);
+      dispatch(clearRoom());
     };
   }, []);
 
   useEffect(() => {
-    if (!socket) return;
-    socket.on("message", (payload: any) => {
-      setMessages([...messages, payload]);
+    if (socket) {
+      if (room) {
+        setMessages(room.posts);
+
+        joinRoom(roomID);
+      } else {
+        leaveRoom(roomID);
+      }
+    }
+  }, [room]);
+
+  useEffect(() => {
+    if (!socket) {
+      return;
+    }
+    socket.on("message", (payload: Post) => {
+      setMessages((prevMessages) => [...prevMessages, payload]);
     });
   }, [socket]);
-
-  console.log(messages);
 
   if (!room) {
     return (
@@ -97,7 +115,7 @@ const Chat = () => {
           })}
         </div>
         <form
-          onSubmit={(e) => handleSubmit(e)}
+          onSubmit={(e) => sendMessage(e)}
           className={style.chat_input_message}
         >
           <input

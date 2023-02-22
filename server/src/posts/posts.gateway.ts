@@ -18,12 +18,12 @@ import { PostsService } from './posts.service';
 export class PostsGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
-  @WebSocketServer() wss: Server;
-
   constructor(
     private readonly roomsService: RoomsService,
     private readonly postsService: PostsService,
   ) {}
+
+  @WebSocketServer() wss: Server;
 
   afterInit(server: any) {
     console.log('Initialized');
@@ -35,21 +35,6 @@ export class PostsGateway
 
   handleDisconnect(client: any) {
     console.log('Disconnected from', client.id);
-  }
-
-  @SubscribeMessage('room')
-  async handleAllMessagesRoom(client: Socket, roomID: string) {
-    const room = await this.roomsService.getByID(roomID);
-
-    if (!room) {
-      throw new NotFoundException(
-        'ROOM_NOT_FOUND',
-        `Room with ID~${roomID} not found`,
-      );
-    }
-
-    // this.wss.to(`room ${room.roomname}`).emit('room', room);
-    client.emit('room', room);
   }
 
   @SubscribeMessage('messageRoom')
@@ -66,8 +51,11 @@ export class PostsGateway
     const createdPost = await this.postsService.create(payload);
     const getCreatedPost = await this.postsService.getByID(createdPost._id);
 
-    // this.wss.to(`room ${room.roomname}`).emit('message', getCreatedPost);
+    console.log(`Send room: ${room.roomname}`);
+
     client.emit('message', getCreatedPost);
+    // this.wss.to(`room ${room.roomname}`).emit('message', getCreatedPost);
+    client.broadcast.emit('message', getCreatedPost);
   }
 
   @SubscribeMessage('joinRoom')
@@ -80,7 +68,7 @@ export class PostsGateway
         `Room with ID~${roomID} not found`,
       );
     }
-
+    console.log(`Joining ${room.roomname}`);
     client.join(`Joining ${room.roomname}`);
   }
 
@@ -94,6 +82,7 @@ export class PostsGateway
         `Room with ID~${roomID} not found`,
       );
     }
+    console.log(`Leaving ${room.roomname}`);
     client.leave(`Leaving ${room.roomname}`);
   }
 }
