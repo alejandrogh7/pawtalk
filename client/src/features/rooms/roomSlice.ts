@@ -44,7 +44,7 @@ export const roomSlice = createSlice({
       state.rooms = null;
     },
     clearRoom: (state) => {
-      state.rooms = null;
+      state.room = null;
     },
     clearCreatedRoom: (state) => {
       state.createdRoom = false;
