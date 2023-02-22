@@ -100,22 +100,28 @@ const Rooms = () => {
           />
         </form>
         <div className={style.rooms_list}>
-          {filteredItems.map((item, index) => {
-            return (
-              <NavLink
-                to={`/chat/${item._id}`}
-                key={index}
-                className={style.rooms_list_item}
-              >
-                <img
-                  // src={item.image}
-                  alt={`${item.roomname} image`}
-                  className={style.item_image}
-                />
-                <p className={style.item_name}>{item.roomname}</p>
-              </NavLink>
-            );
-          })}
+          {filteredItems.length ? (
+            filteredItems.map((item, index) => {
+              return (
+                <NavLink
+                  to={`/chat/${item._id}`}
+                  key={index}
+                  className={style.rooms_list_item}
+                >
+                  <img
+                    // src={item.image}
+                    alt={`${item.roomname} image`}
+                    className={style.item_image}
+                  />
+                  <p className={style.item_name}>{item.roomname}</p>
+                </NavLink>
+              );
+            })
+          ) : (
+            <NavLink to={`/room/create`} className={style.rooms_list_item}>
+              <p className={style.item_name}>Create Room</p>
+            </NavLink>
+          )}
         </div>
       </div>
     );
