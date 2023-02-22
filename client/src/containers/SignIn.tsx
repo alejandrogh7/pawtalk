@@ -40,7 +40,9 @@ const SignIn = () => {
       setValue("email", "");
     }, 1000);
 
-    return navigate("/chat", { replace: true });
+    setTimeout(() => {
+      return navigate("/chat", { replace: true });
+    }, 1200);
   };
 
   useEffect(() => {
