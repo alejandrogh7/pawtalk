@@ -91,7 +91,7 @@ const SignUp = () => {
       <div className={style.form_input_cont}>
         <input
           type="text"
-          placeholder="Name"
+          placeholder="Username"
           className={style.form_input}
           {...register("name", {
             required: true,
