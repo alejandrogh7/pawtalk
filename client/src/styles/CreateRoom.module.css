@@ -11,6 +11,7 @@
 .form_input_cont {
   width: 400px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
@@ -24,13 +25,21 @@
   font-size: 16px;
 }
 
+.input_error {
+  width: 100%;
+  word-break: keep-all;
+  color: crimson;
+  font-size: 14px;
+  text-align: start;
+}
+
 .form_textarea {
   border: 1px solid whitesmoke;
   width: 100%;
   border-radius: 10px;
   padding: 15px 10px;
   margin: 20px 10px;
-  font-size: 16px;
+  font-size: 20px;
   max-width: 400px;
   min-width: 300px;
   max-height: 200px;
@@ -59,7 +68,7 @@
   }
 
   .form_input_cont {
-    width: 100%;
+    width: 90%;
   }
 
   .form_input {
@@ -73,5 +82,6 @@
 
   .form_submit {
     font-size: 20px;
+    width: 90%;
   }
 }

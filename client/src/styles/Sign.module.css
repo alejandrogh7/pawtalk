@@ -180,6 +180,7 @@
 .form_input_cont {
   width: 400px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
@@ -191,6 +192,14 @@
   padding: 15px 10px;
   margin: 20px 10px;
   font-size: 16px;
+}
+
+.input_error {
+  width: 100%;
+  word-break: keep-all;
+  color: crimson;
+  font-size: 14px;
+  text-align: start;
 }
 
 .form_submit {
@@ -221,9 +230,11 @@
 
   .form_input {
     font-size: 20px;
+    width: 90%;
   }
 
   .form_submit {
     font-size: 20px;
+    width: 90%;
   }
 }
