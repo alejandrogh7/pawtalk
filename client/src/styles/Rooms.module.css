@@ -99,13 +99,14 @@
   justify-content: space-evenly;
   width: 250px;
   height: 90px;
-  border: 1px solid rebeccapurple;
+  border: 1px solid rgb(38, 38, 38);
+  background-color: rgb(28, 28, 28);
   border-radius: 20px;
   cursor: pointer;
 }
 
 .item_image {
-  border: 1px solid red;
+  border: 1px solid rgb(38, 38, 38);
   width: 70px;
   height: 70px;
   object-fit: contain;
