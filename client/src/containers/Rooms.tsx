@@ -107,6 +107,7 @@ const Rooms = () => {
                   to={`/chat/${item._id}`}
                   key={index}
                   className={style.rooms_list_item}
+                  onClick={() => setOpen(!open)}
                 >
                   <img
                     // src={item.image}
