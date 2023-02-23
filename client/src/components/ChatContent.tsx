@@ -24,11 +24,11 @@ const ChatContent: React.FC<ChatContentProps> = ({
         className={`${style.chat_user_body} ${style.chat_my_body}`}
         key={index}
       >
-        <img
+        {/* <img
           src="https://wallpapers.com/images/featured/7nffbkza5h89jssn.jpg"
           alt={`username image`}
           className={style.user_image}
-        />
+        /> */}
         <div className={style.user_body_data_cont}>
           <div className={`${style.user_data} ${style.my_data}`}>
             <p className={style.user_name}>{sender_name}</p>
