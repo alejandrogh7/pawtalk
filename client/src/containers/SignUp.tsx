@@ -2,9 +2,14 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../app/store";
-import { fetchSignUp, selectSignUp } from "../features/users/userSlice";
+import {
+  fetchSignUp,
+  selectSignUp,
+  selectSignUpStatus,
+} from "../features/users/userSlice";
 import style from "../styles/Sign.module.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import useCookies from "../hooks/useCookies";
 
 type Inputs = {
   email: string;
@@ -14,8 +19,14 @@ type Inputs = {
 };
 
 const SignUp = () => {
+  const aToken = useCookies("access_token", "");
+  const rToken = useCookies("refresh_token", "");
+
+  const [submitted, setSubmitted] = useState<boolean>(false);
+
   const dispatch = useDispatch<AppDispatch>();
   const signup = useSelector(selectSignUp);
+  const signupStatus = useSelector(selectSignUpStatus);
 
   const navigate = useNavigate();
 
@@ -45,13 +56,25 @@ const SignUp = () => {
       setValue("password", "");
       setValue("confirmPassword", "");
     }, 1000);
+
+    setSubmitted(true);
   };
 
   useEffect(() => {
-    if (signup) {
-      return navigate("/signin", { replace: true });
+    if (aToken && rToken) {
+      return navigate("/chat", { replace: true });
     }
-  }, [signup]);
+  }, []);
+
+  useEffect(() => {
+    if (submitted) {
+      if (signupStatus === 201) {
+        return navigate("/signin", { replace: true });
+      } else {
+        return alert("ERROR SIGN UP ERROR");
+      }
+    }
+  }, [signup, signupStatus]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={style.signin_cont}>
