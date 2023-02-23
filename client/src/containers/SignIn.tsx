@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -7,7 +7,9 @@ import {
   fetchSignIn,
   selectSignIn,
   clearSignup,
+  selectSignInStatus,
 } from "../features/users/userSlice";
+import useCookies from "../hooks/useCookies";
 import style from "../styles/Sign.module.css";
 
 type Inputs = {
@@ -16,10 +18,16 @@ type Inputs = {
 };
 
 const SignIn = () => {
+  const aToken = useCookies("access_token", "");
+  const rToken = useCookies("refresh_token", "");
+
+  const [submitted, setSubmitted] = useState<boolean>(false);
+
   const navigate = useNavigate();
 
   const dispatch = useDispatch<AppDispatch>();
   const signin = useSelector(selectSignIn);
+  const signinStatus = useSelector(selectSignInStatus);
 
   const {
     register,
@@ -41,14 +49,28 @@ const SignIn = () => {
       setValue("email", "");
     }, 1000);
 
-    setTimeout(() => {
-      return navigate("/chat", { replace: true });
-    }, 1200);
+    setSubmitted(true);
   };
+
+  useEffect(() => {
+    if (aToken && rToken) {
+      return navigate("/chat", { replace: true });
+    }
+  }, []);
 
   useEffect(() => {
     dispatch(clearSignup());
   }, []);
+
+  useEffect(() => {
+    if (submitted) {
+      if (signinStatus === 201) {
+        return navigate("/chat", { replace: true });
+      } else {
+        return alert("ERROR SIGN IN ERROR");
+      }
+    }
+  }, [signin, signinStatus]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={style.signin_cont}>
@@ -96,44 +118,3 @@ const SignIn = () => {
 };
 
 export default SignIn;
-
-// <section className={style.formcarry_container}>
-//   <form action="#" method="POST">
-//     <div className={style.formcarry_block}>
-//       <label>Full Name</label>
-//       <input
-//         type="text"
-//         name="name"
-//         placeholder="Your first and last name"
-//       />
-//     </div>
-
-//     <div className={style.formcarry_block}>
-//       <label>Your Email Address</label>
-//       <input type="email" name="email" placeholder="john@doe.com" />
-//     </div>
-
-//     <div className={style.formcarry_block}>
-//       <label>Your Phone Number</label>
-//       <input type="tel" name="telephone" placeholder="### ### ####" />
-//     </div>
-
-//     <div className={style.formcarry_block}>
-//       <label>Number of people attending:</label>
-//       <select name="people">
-//         <option value="" selected disabled>
-//           Please select..
-//         </option>
-//         <option value="1">1</option>
-//         <option value="2">2</option>
-//         <option value="3">3</option>
-//         <option value="4">4</option>
-//         <option value="5">5</option>
-//       </select>
-//     </div>
-
-//     <div className={style.formcarry_block}>
-//       <button type="submit">Send</button>
-//     </div>
-//   </form>
-// </section>
