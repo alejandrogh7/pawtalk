@@ -6,8 +6,9 @@ import {
   getAllRooms,
   selectRooms,
   clearRooms,
+  selectRoomsStatus,
 } from "../features/rooms/roomSlice";
-import { clearSignin } from "../features/users/userSlice";
+import { fetchSignOut } from "../features/users/userSlice";
 import useUser from "../hooks/useUser";
 import useSearch from "../hooks/useSearch";
 import useOutsideToClose from "../hooks/useOutsideToClose";
@@ -26,6 +27,7 @@ const Rooms = () => {
 
   const dispatch = useDispatch<AppDispatch>();
   const rooms = useSelector(selectRooms);
+  const roomsStatus = useSelector(selectRoomsStatus);
 
   const roomsRef = createRef<HTMLDivElement>();
   const { searchTerm, filteredItems, setSearchTerm } = useSearch(rooms);
@@ -36,7 +38,7 @@ const Rooms = () => {
   };
 
   const handleLogOut = () => {
-    dispatch(clearSignin());
+    dispatch(fetchSignOut());
     return navigate("/signin", { replace: true });
   };
 
@@ -100,7 +102,7 @@ const Rooms = () => {
           />
         </form>
         <div className={style.rooms_list}>
-          {filteredItems.length ? (
+          {filteredItems.length && roomsStatus === 200 ? (
             filteredItems.map((item, index) => {
               return (
                 <NavLink
@@ -109,11 +111,11 @@ const Rooms = () => {
                   className={style.rooms_list_item}
                   onClick={() => setOpen(!open)}
                 >
-                  <img
-                    // src={item.image}
+                  {/* <img
+                    src={item.image}
                     alt={`${item.roomname} image`}
                     className={style.item_image}
-                  />
+                  /> */}
                   <p className={style.item_name}>{item.roomname}</p>
                 </NavLink>
               );
