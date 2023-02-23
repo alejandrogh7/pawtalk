@@ -1,22 +1,20 @@
-import axios from "axios";
-import { CreateRoom, Room, Rooms } from "./room.interface";
+import { AxiosResponse } from "axios";
+import axiosConf from "../../app/axiosConfig";
+import { CreateRoom } from "./room.interface";
 
-export const fetchRooms = async (): Promise<Rooms[]> => {
-  const response = await axios.get(`${import.meta.env.VITE_API_URL}/rooms`);
-  return response.data;
+export const fetchRooms = async (): Promise<AxiosResponse> => {
+  const response = await axiosConf.get(`/rooms`);
+  return response;
 };
 
-export const fetchRoom = async (roomID: string): Promise<Room> => {
-  const response = await axios.get(
-    `${import.meta.env.VITE_API_URL}/rooms/${roomID}`
-  );
-  return response.data;
+export const fetchRoom = async (roomID: string): Promise<AxiosResponse> => {
+  const response = await axiosConf.get(`/rooms/${roomID}`);
+  return response;
 };
 
-export const fetchCreateRoom = async (payload: CreateRoom) => {
-  const response = await axios.post(
-    `${import.meta.env.VITE_API_URL}/rooms/`,
-    payload
-  );
-  return response.data;
+export const fetchCreateRoom = async (
+  payload: CreateRoom
+): Promise<AxiosResponse> => {
+  const response = await axiosConf.post(`/rooms/`, payload);
+  return response;
 };
