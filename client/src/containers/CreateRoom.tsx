@@ -1,15 +1,27 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useUser from "../hooks/useUser";
-import { createRoom } from "../features/rooms/roomSlice";
+import {
+  clearCreatedRoom,
+  createRoom,
+  selectCreatedRoom,
+  selectCreatedRoomStatus,
+  selectRoom,
+} from "../features/rooms/roomSlice";
 import style from "../styles/CreateRoom.module.css";
 import { CreateRoom as CreateRoomDTO } from "../features/rooms/room.interface";
 import { AppDispatch } from "../app/store";
 import { useNavigate } from "react-router-dom";
 
 const CreateRoom = () => {
+  const [submitted, setSubmitted] = useState<boolean>(false);
+
   const dispatch = useDispatch<AppDispatch>();
+
+  const createdRoom = useSelector(selectCreatedRoom);
+  const createdRoomStatus = useSelector(selectCreatedRoomStatus);
+  const room = useSelector(selectRoom);
 
   const navigate = useNavigate();
 
@@ -37,10 +49,24 @@ const CreateRoom = () => {
       setValue("description", "");
     }, 1000);
 
-    setTimeout(() => {
-      return navigate("/chat", { replace: true });
-    }, 1200);
+    setSubmitted(true);
   };
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearCreatedRoom());
+    };
+  }, []);
+
+  useEffect(() => {
+    if (submitted) {
+      if (createdRoomStatus === 201 && createdRoom) {
+        return navigate(`/chat/${room?._id}`, { replace: true });
+      } else {
+        return alert("ERROR ROOM NOT CREATED");
+      }
+    }
+  }, [createdRoom, createdRoomStatus]);
 
   useEffect(() => {
     setValue("userId", user ? user._id : "");
