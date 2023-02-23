@@ -1,24 +1,31 @@
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import ChatRooms from "./components/ChatRooms";
 import ChatRoomNotFound from "./components/ChatRoomNotFound";
-import "./styles/App.css";
 import SignInCont from "./components/SignInCont";
 import SignUpCont from "./components/SignUpCont";
-import { Fragment, useEffect } from "react";
+import { useEffect } from "react";
 import useCookies from "./hooks/useCookies";
 import CreateRoomCont from "./components/CreateRoomCont";
+import "./styles/App.css";
 
 function App() {
-  const { aToken, rToken } = useCookies();
+  const aToken = useCookies("access_token", "");
+  const rToken = useCookies("refresh_token", "");
 
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
-    if (!aToken && !rToken && location.pathname === "/") {
-      return navigate("/signin", { replace: true });
+    if (!aToken && !rToken) {
+      if (location.pathname === "/") {
+        return navigate("/signin", { replace: true });
+      }
+    } else {
+      if (location.pathname === "/") {
+        return navigate("/chat", { replace: true });
+      }
     }
-  }, []);
+  }, [location.pathname]);
 
   return (
     <div className="App">
