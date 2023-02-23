@@ -1,28 +1,21 @@
-import { useState, useEffect } from "react";
-import Cookies from "js-cookie";
+import { useState } from "react";
 
-const useCookies = () => {
-  const [aToken, setAToken] = useState<string>("");
-  const [rToken, setRToken] = useState<string>("");
+const getCookieValue = (key: string): string => {
+  return document.cookie
+    .split("; ")
+    .reduce((total: string, currentCookie: string): string => {
+      const item = currentCookie.split("=");
+      const storedKey = item[0];
+      const storedValue = item[1];
 
-  const getTokens = () => {
-    const [a, r] = [Cookies.get("access_token"), Cookies.get("refresh_token")];
-    return { a, r };
-  };
+      return key === storedKey ? decodeURIComponent(storedValue) : total;
+    }, "");
+};
 
-  useEffect(() => {
-    const tokens = getTokens();
-
-    if (tokens.a) {
-      setAToken(tokens.a);
-    }
-
-    if (tokens.r) {
-      setRToken(tokens.r);
-    }
-  }, []);
-
-  return { aToken, rToken };
+const useCookies = (key: string, defaultValue: string): string => {
+  const getCookie = () => getCookieValue(key) || defaultValue;
+  const [cookie, setCookie] = useState<string>(getCookie());
+  return cookie;
 };
 
 export default useCookies;
