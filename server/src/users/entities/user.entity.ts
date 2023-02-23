@@ -10,6 +10,10 @@ export class User {
   @Field(() => ID)
   _id: string;
 
+  // @Field(() => String)
+  // @Prop({ required: true })
+  // image: string;
+
   @Field()
   @Prop({ required: true })
   name: string;

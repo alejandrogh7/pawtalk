@@ -10,6 +10,10 @@ export class Room {
   @Field(() => ID)
   _id: string;
 
+  // @Field(() => String)
+  // @Prop({ required: true })
+  // image: string;
+
   @Field(() => String)
   @Prop({ required: true })
   roomname: string;
