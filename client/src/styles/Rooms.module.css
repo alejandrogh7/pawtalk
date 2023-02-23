@@ -11,6 +11,7 @@
   position: absolute;
   top: 0;
   left: 0;
+  z-index: 1;
 }
 
 .no_rooms_lists_cont {
@@ -90,6 +91,18 @@
   gap: 20px;
   overflow-y: scroll;
   padding: 30px 0;
+}
+
+.rooms_list::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.rooms_list::-webkit-scrollbar {
+  background-color: transparent;
+}
+
+.rooms_list::-webkit-scrollbar-thumb {
+  background-color: transparent;
 }
 
 .rooms_list_item {

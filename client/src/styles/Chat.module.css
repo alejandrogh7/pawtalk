@@ -37,6 +37,18 @@
   overflow-y: scroll;
 }
 
+.chat_body_cont::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.chat_body_cont::-webkit-scrollbar {
+  background-color: transparent;
+}
+
+.chat_body_cont::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+
 .chat_input_message {
   width: 100%;
   padding: 20px 0;
