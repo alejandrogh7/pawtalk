@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
+import axiosConf from "../../app/axiosConfig";
 import { RootState } from "../../app/store";
 import { SigninPayload, SignupPayload, User } from "./user.interface";
 import { fetchLogin, fetchRegister, fetchLogout } from "./userAPI";
@@ -49,6 +50,13 @@ export const userSlice = createSlice({
       state.signup = false;
       state.signupStatus = 0;
     },
+    clearSignin: (state) => {
+      state.signin = null;
+      state.signinStatus = 0;
+      localStorage.removeItem("user");
+      Cookies.remove("access_token");
+      Cookies.remove("refresh_token");
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -92,7 +100,7 @@ export const userSlice = createSlice({
   },
 });
 
-export const { clearSignup } = userSlice.actions;
+export const { clearSignup, clearSignin } = userSlice.actions;
 
 export const selectSignUp = (state: RootState) => state.users.signup;
 

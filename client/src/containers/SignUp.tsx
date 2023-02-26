@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../app/store";
 import {
   fetchSignUp,
+  selectSignIn,
   selectSignUp,
   selectSignUpStatus,
 } from "../features/users/userSlice";
@@ -25,6 +26,7 @@ const SignUp = () => {
   const [submitted, setSubmitted] = useState<boolean>(false);
 
   const dispatch = useDispatch<AppDispatch>();
+  const signin = useSelector(selectSignIn);
   const signup = useSelector(selectSignUp);
   const signupStatus = useSelector(selectSignUpStatus);
 
@@ -59,6 +61,12 @@ const SignUp = () => {
 
     setSubmitted(true);
   };
+
+  useEffect(() => {
+    if (signin?._id) {
+      return navigate("/chat", { replace: true });
+    }
+  }, []);
 
   useEffect(() => {
     if (aToken && rToken) {

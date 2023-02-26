@@ -26,6 +26,23 @@ export class UsersService {
     return this.userModel
       .findOne({ email: email.toLocaleLowerCase().trim() })
       .select('-hashedRt -__v')
+      .populate({
+        path: 'posts',
+        select: '-__v -sender -createdAt -updatedAt',
+        populate: {
+          path: 'room',
+          select:
+            '-__v -description -createdAt -updatedAt -creator -posts -users',
+        },
+      })
+      .populate(
+        'rooms',
+        '-__v -description -createdAt -updatedAt -creator -posts -users',
+      )
+      .populate(
+        'createdRooms',
+        '-__v -description -createdAt -updatedAt -creator -posts -users',
+      )
       .exec();
   }
 

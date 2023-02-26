@@ -53,6 +53,12 @@ const SignIn = () => {
   };
 
   useEffect(() => {
+    if (signin?._id) {
+      return navigate("/chat", { replace: true });
+    }
+  }, []);
+
+  useEffect(() => {
     if (aToken && rToken) {
       return navigate("/chat", { replace: true });
     }

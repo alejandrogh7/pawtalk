@@ -8,23 +8,13 @@ import {
   clearRooms,
   selectRoomsStatus,
 } from "../features/rooms/roomSlice";
-import { fetchSignOut } from "../features/users/userSlice";
-import useUser from "../hooks/useUser";
 import useSearch from "../hooks/useSearch";
 import useOutsideToClose from "../hooks/useOutsideToClose";
-import Search from "../assets/Search.svg";
 import Close from "../assets/Close.svg";
-import User from "../assets/User.svg";
-import AddUser from "../assets/AddUser.svg";
-import ChatAdd from "../assets/ChatAdd.svg";
-import UserOut from "../assets/UserOut.svg";
 import style from "../styles/Rooms.module.css";
+import ChatNavbar from "./CharNavbar";
 
 const Rooms = () => {
-  const navigate = useNavigate();
-
-  const { user } = useUser();
-
   const dispatch = useDispatch<AppDispatch>();
   const rooms = useSelector(selectRooms);
   const roomsStatus = useSelector(selectRoomsStatus);
@@ -37,11 +27,6 @@ const Rooms = () => {
     e.preventDefault();
   };
 
-  const handleLogOut = () => {
-    dispatch(fetchSignOut());
-    return navigate("/signin", { replace: true });
-  };
-
   useEffect(() => {
     dispatch(getAllRooms());
 
@@ -51,36 +36,7 @@ const Rooms = () => {
   }, []);
 
   if (!open) {
-    return (
-      <div className={style.no_rooms_lists_cont}>
-        <img
-          src={Search}
-          className={style.no_rooms_icon}
-          onClick={() => setOpen(!open)}
-        />
-        <NavLink to="/room/create">
-          <img src={ChatAdd} className={style.no_rooms_icon} />
-        </NavLink>
-        {!user?._id ? (
-          <Fragment>
-            <NavLink to="/signin">
-              <img src={User} className={style.no_rooms_icon} />
-            </NavLink>
-            <NavLink to="/signup">
-              <img src={AddUser} className={style.no_rooms_icon} />
-            </NavLink>
-          </Fragment>
-        ) : (
-          <Fragment>
-            <img
-              src={UserOut}
-              className={style.no_rooms_icon}
-              onClick={() => handleLogOut()}
-            />
-          </Fragment>
-        )}
-      </div>
-    );
+    return <ChatNavbar open={open} setOpen={setOpen} />;
   } else
     return (
       <div className={`${style.rooms_list_cont} ${""}`} ref={roomsRef}>
